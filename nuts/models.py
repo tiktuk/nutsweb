@@ -27,7 +27,7 @@ class Show(TimeStampedModel):
         return self.name
 
 
-class Genre(models.Model):
+class Genre(TimeStampedModel):
     id = models.CharField(max_length=100, primary_key=True)
     value = models.CharField(max_length=100)
 
@@ -35,7 +35,7 @@ class Genre(models.Model):
         return self.value
 
 
-class Mood(models.Model):
+class Mood(TimeStampedModel):
     id = models.CharField(max_length=100, primary_key=True)
     value = models.CharField(max_length=100)
 
