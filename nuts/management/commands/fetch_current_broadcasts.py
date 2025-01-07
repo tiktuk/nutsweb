@@ -6,7 +6,7 @@ from nutstosoup import (
     NTSAPITimeoutError,
     NTSAPIResponseError,
 )
-from nuts.models import Channel, Show, Episode, Broadcast, Media
+from nuts.models import Channel, Show, Episode, Broadcast, Media, Genre, Mood
 
 
 class Command(BaseCommand):
@@ -42,7 +42,7 @@ class Command(BaseCommand):
                 )
 
                 if broadcast.episode_alias:
-                    episode, _ = Episode.objects.get_or_create(
+                    episode, created = Episode.objects.get_or_create(
                         episode_alias=broadcast.episode_alias,
                         defaults={
                             "show": show,
@@ -53,6 +53,25 @@ class Command(BaseCommand):
                             "status": "published",
                         },
                     )
+
+                    # Add genres and moods if present in broadcast details
+                    if broadcast.raw_json:
+                        details = broadcast.raw_json.get("embeds", {}).get("details", {})
+                        if "genres" in details:
+                            for genre_data in details["genres"]:
+                                genre, _ = Genre.objects.get_or_create(
+                                    id=genre_data["id"],
+                                    defaults={"value": genre_data["value"]},
+                                )
+                                episode.genres.add(genre)
+
+                        if "moods" in details:
+                            for mood_data in details["moods"]:
+                                mood, _ = Mood.objects.get_or_create(
+                                    id=mood_data["id"],
+                                    defaults={"value": mood_data["value"]},
+                                )
+                                episode.moods.add(mood)
 
                     # Create media if we have picture URL
                     if broadcast.picture_url and episode:
