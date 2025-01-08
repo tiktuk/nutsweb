@@ -54,40 +54,39 @@ class Command(BaseCommand):
                         },
                     )
 
-                    # Add genres and moods if present in broadcast details
-                    if broadcast.raw_json:
-                        details = broadcast.raw_json.get("embeds", {}).get("details", {})
-                        if "genres" in details:
-                            for genre_data in details["genres"]:
-                                genre, _ = Genre.objects.get_or_create(
-                                    id=genre_data["id"],
-                                    defaults={"value": genre_data["value"]},
-                                )
-                                episode.genres.add(genre)
+                    # Add genres and moods from broadcast details
+                    details = broadcast.embeds.details
+                    if details.genres:
+                        for genre_data in details.genres:
+                            genre, _ = Genre.objects.get_or_create(
+                                id=genre_data.id,
+                                defaults={"value": genre_data.value},
+                            )
+                            episode.genres.add(genre)
 
-                        if "moods" in details:
-                            for mood_data in details["moods"]:
-                                mood, _ = Mood.objects.get_or_create(
-                                    id=mood_data["id"],
-                                    defaults={"value": mood_data["value"]},
-                                )
-                                episode.moods.add(mood)
+                    if details.moods:
+                        for mood_data in details.moods:
+                            mood, _ = Mood.objects.get_or_create(
+                                id=mood_data.id,
+                                defaults={"value": mood_data.value},
+                            )
+                            episode.moods.add(mood)
 
-                    # Create media if we have picture URL
-                    if broadcast.picture_url and episode:
+                    # Create media using broadcast media details
+                    if details.media and episode:
                         Media.objects.get_or_create(
                             episode=episode,
                             defaults={
-                                "picture_large": broadcast.picture_url,
-                                "picture_medium_large": broadcast.picture_url,
-                                "picture_medium": broadcast.picture_url,
-                                "picture_small": broadcast.picture_url,
-                                "picture_thumb": broadcast.picture_url,
-                                "background_large": broadcast.picture_url,
-                                "background_medium_large": broadcast.picture_url,
-                                "background_medium": broadcast.picture_url,
-                                "background_small": broadcast.picture_url,
-                                "background_thumb": broadcast.picture_url,
+                                "picture_large": details.media.picture_large,
+                                "picture_medium_large": details.media.picture_medium_large,
+                                "picture_medium": details.media.picture_medium,
+                                "picture_small": details.media.picture_small,
+                                "picture_thumb": details.media.picture_thumb,
+                                "background_large": details.media.background_large,
+                                "background_medium_large": details.media.background_medium_large,
+                                "background_medium": details.media.background_medium,
+                                "background_small": details.media.background_small,
+                                "background_thumb": details.media.background_thumb,
                             },
                         )
 
