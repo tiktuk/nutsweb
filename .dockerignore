@@ -1,0 +1,2 @@
+# The project virtual environment is dependent on your local platform and should be created from scratch in the image
+.venv
