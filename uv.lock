@@ -236,14 +236,10 @@ wheels = [
 
 [[package]]
 name = "nutstosoup"
-version = "0.2.0"
-source = { registry = "https://pypi.org/simple" }
+version = "0.4.0"
+source = { git = "https://github.com/tiktuk/nutstosoup.git#a4f6d858fe59da084a8073499e65f4eb86c50dcd" }
 dependencies = [
     { name = "requests" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/d6/b1/ab8328096d9f00fa637682d21cbba8e7ceeddbedf27882b91bff6d3f7232/nutstosoup-0.2.0.tar.gz", hash = "sha256:2ad19fe5e3d43be3a1a370f7aab1603202dce6d9698db7e10e8def7b852d1439", size = 24977 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/53/40/5f6ebde9c6493d3273ee08448f61247142aaaf8d60a99a1c150ddc137f99/nutstosoup-0.2.0-py3-none-any.whl", hash = "sha256:dcbbe69c0a9bb4c5f25eb3411fe293ed63669c6502d312cd22ea6b901111336f", size = 3335 },
 ]
 
 [[package]]
@@ -274,7 +270,7 @@ requires-dist = [
     { name = "django-debug-toolbar", specifier = "~=4.4" },
     { name = "django-extensions", specifier = ">=3.2.3" },
     { name = "gunicorn", specifier = "~=23.0" },
-    { name = "nutstosoup", specifier = ">=0.2.0" },
+    { name = "nutstosoup", git = "https://github.com/tiktuk/nutstosoup.git" },
     { name = "whitenoise", specifier = "~=6.7" },
 ]
 
