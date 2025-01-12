@@ -5,7 +5,7 @@ FROM python:3.12.2-slim-bookworm
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# Create and set work directory called `app`
+# Create and set work directory called `code`
 RUN mkdir -p /code
 WORKDIR /code
 
