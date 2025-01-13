@@ -1,6 +1,12 @@
 # Pull base image
 FROM python:3.13.1-slim-bookworm
 
+# Install git
+RUN apt-get update &&\
+    apt-get install -y --no-install-recommends git &&\
+    apt-get purge -y --auto-remove &&\
+    rm -rf /var/lib/apt/lists/*
+
 # Install uv
 COPY --from=ghcr.io/astral-sh/uv:0.5.18 /uv /uvx /bin/
 
