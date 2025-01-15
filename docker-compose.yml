@@ -6,3 +6,17 @@ services:
       - .:/code
     ports:
       - 8000:8000
+    profiles:
+      - dev
+
+  gunicorn:
+    build: .
+    volumes:
+      - .:/code
+    ports:
+      - 8000:8000
+    environment:
+      DJANGO_SETTINGS_MODULE: "django_project.settings"
+    profiles:
+      - prod
+    command: gunicorn django_project.wsgi:application --bind 0.0.0.0:8000 --workers 2
