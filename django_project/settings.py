@@ -6,7 +6,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Load environment variables from .env file into the environment
 env = Env()
-env.read_env()
+try:
+    env.read_env()
+except Exception:
+    pass  # Allow Django to start even if .env is missing
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/dev/howto/deployment/checklist/
@@ -17,7 +20,7 @@ SECRET_KEY = env.str(
 )
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
-DEBUG = env.bool("DEBUG")
+DEBUG = env.bool("DEBUG", False)
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", ["localhost", "0.0.0.0", "127.0.0.1"])
@@ -84,14 +87,10 @@ TEMPLATES = [
     },
 ]
 
-# SQLite database
+# Database
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
+DATABASE_URL = env.str("DATABASE_URL", default=f"sqlite:///{BASE_DIR}/db.sqlite3")
+DATABASES = {"default": env.dj_db_url("DATABASE_URL", default=DATABASE_URL)}
 
 # Password validation
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-password-validators
