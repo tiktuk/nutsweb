@@ -4,6 +4,7 @@ import sys
 from datetime import datetime
 from argparse import ArgumentParser
 
+
 def main():
     parser = ArgumentParser(description="List broadcasts from NTS API")
     parser.add_argument(
@@ -12,16 +13,24 @@ def main():
         choices=[1, 2],
         help="Filter broadcasts by channel number (1 or 2)",
     )
+    parser.add_argument(
+        "--api-url",
+        default="http://localhost:8000",
+        help="Base URL of the API (default: http://localhost:8000)",
+    )
     args = parser.parse_args()
 
+    api_url = args.api_url.rstrip("/")
     try:
-        response = requests.get("http://localhost:8000/api/broadcasts")
+        response = requests.get(f"{api_url}/api/broadcasts")
         response.raise_for_status()
         broadcasts = response.json()
 
         # Filter by channel if specified
         if args.channel:
-            broadcasts = [b for b in broadcasts if b["channel"]["name"] == str(args.channel)]
+            broadcasts = [
+                b for b in broadcasts if b["channel"]["name"] == str(args.channel)
+            ]
 
         # Sort by start timestamp
         broadcasts.sort(key=lambda x: x["start_timestamp"])
@@ -29,8 +38,12 @@ def main():
         current_date = None
 
         for broadcast in broadcasts:
-            start_time = datetime.fromisoformat(broadcast["start_timestamp"].replace("Z", "+00:00"))
-            end_time = datetime.fromisoformat(broadcast["end_timestamp"].replace("Z", "+00:00"))
+            start_time = datetime.fromisoformat(
+                broadcast["start_timestamp"].replace("Z", "+00:00")
+            )
+            end_time = datetime.fromisoformat(
+                broadcast["end_timestamp"].replace("Z", "+00:00")
+            )
             broadcast_date = start_time.date()
 
             # Add day marker if we're on a new day
@@ -48,6 +61,7 @@ def main():
     except requests.exceptions.RequestException as e:
         print(f"Error fetching broadcasts: {e}", file=sys.stderr)
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()
