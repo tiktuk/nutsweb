@@ -1,0 +1,8 @@
+[Unit]
+Description=Unit for fetching data from NTS for the nutsweb service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/tuk/projects/nutsweb
+ExecStart=/home/linuxbrew/.linuxbrew/bin/uv run manage.py fetch_current_broadcasts
+

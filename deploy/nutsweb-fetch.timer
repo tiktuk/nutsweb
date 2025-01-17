@@ -1,0 +1,12 @@
+[Unit]
+Description=Nutsweb timer
+
+[Timer]
+# Run 10 seconds after boot
+OnBootSec=10s
+
+# And every 30 minutes after that
+OnUnitActiveSec=30min
+
+[Install]
+WantedBy=timers.target
