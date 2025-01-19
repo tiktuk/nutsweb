@@ -4,7 +4,7 @@ from django.urls import path, include
 from nuts.api import api
 
 urlpatterns = [
-    path("api/", api.urls),
+    path("api/v1.0/", api.urls),
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
     path("", include("pages.urls")),
